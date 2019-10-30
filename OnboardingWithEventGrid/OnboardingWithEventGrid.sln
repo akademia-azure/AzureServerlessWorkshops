@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingWithEventGrid", "OnboardingWithEventGrid\OnboardingWithEventGrid.csproj", "{8753AF46-57EE-49F1-A84F-62FA8247CC5E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8753AF46-57EE-49F1-A84F-62FA8247CC5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8753AF46-57EE-49F1-A84F-62FA8247CC5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8753AF46-57EE-49F1-A84F-62FA8247CC5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8753AF46-57EE-49F1-A84F-62FA8247CC5E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8758CF56-E1B9-452F-AEF8-90D678F94FC8}
+	EndGlobalSection
+EndGlobal
