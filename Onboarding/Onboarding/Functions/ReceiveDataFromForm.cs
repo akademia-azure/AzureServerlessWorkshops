@@ -13,7 +13,7 @@ namespace Onboarding.Functions
 {
     public static class ReceiveDataFromForm
     {
-        [FunctionName("ReceiveDataFromForm")]
+        [FunctionName(nameof(ReceiveDataFromForm))]
         public static async Task<IActionResult> Run(
               [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
               [Queue("emailQueue", Connection = "StorageConnectionString")] CloudQueue emailQueue,

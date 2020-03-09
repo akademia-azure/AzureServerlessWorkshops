@@ -8,7 +8,7 @@ namespace Onboarding.Functions
 {
     public static class SendEmail
     {
-        [FunctionName("SendEmail")]
+        [FunctionName(nameof(SendEmail))]
         public static void Run(
             [QueueTrigger("emailqueue", Connection = "AzureWebJobsStorage")] string myQueueItem,
             [SendGrid(ApiKey = "SendGridApiKey")] out SendGridMessage message,

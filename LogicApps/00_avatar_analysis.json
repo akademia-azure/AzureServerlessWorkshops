@@ -1,0 +1,105 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Analyze_Image": {
+                "inputs": {
+                    "body": {
+                        "url": "https://<insert-azurestorage-name>.blob.core.windows.net@{triggerBody()?['Path']}"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['cognitiveservicescomputervision']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/vision/v2.0/analyze",
+                    "queries": {
+                        "format": "Image URL",
+                        "visualFeatures": "Tags,Description,Categories"
+                    }
+                },
+                "runAfter": {},
+                "type": "ApiConnection"
+            },
+            "Create_blob": {
+                "inputs": {
+                    "body": "@body('Analyze_Image')",
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/datasets/default/files",
+                    "queries": {
+                        "folderPath": "/avatarsanalysis",
+                        "name": "@{concat(triggerBody()?['Name'], '.json')}",
+                        "queryParametersSingleEncoded": true
+                    }
+                },
+                "runAfter": {
+                    "Analyze_Image": [
+                        "Succeeded"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                },
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "When_a_blob_is_added_or_modified_(properties_only)": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/datasets/default/triggers/batch/onupdatedfile",
+                    "queries": {
+                        "folderId": "JTJmYXZhdGFycw==",
+                        "maxFileCount": 1
+                    }
+                },
+                "metadata": {
+                    "JTJmYXZhdGFycw==": "/avatars"
+                },
+                "recurrence": {
+                    "frequency": "Minute",
+                    "interval": 1
+                },
+                "splitOn": "@triggerBody()",
+                "type": "ApiConnection"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "azureblob": {
+                    "connectionId": "/subscriptions/<insert-subscription-id>/resourceGroups/serverless-workshops/providers/Microsoft.Web/connections/azureblob",
+                    "connectionName": "azureblob",
+                    "id": "/subscriptions/<insert-subscription-id>/providers/Microsoft.Web/locations/westeurope/managedApis/azureblob"
+                },
+                "cognitiveservicescomputervision": {
+                    "connectionId": "/subscriptions/<insert-subscription-id>/resourceGroups/serverless-workshops/providers/Microsoft.Web/connections/cognitiveservicescomputervision",
+                    "connectionName": "cognitiveservicescomputervision",
+                    "id": "/subscriptions/<insert-subscription-id>/providers/Microsoft.Web/locations/westeurope/managedApis/cognitiveservicescomputervision"
+                }
+            }
+        }
+    }
+}

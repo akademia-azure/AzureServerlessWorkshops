@@ -12,7 +12,7 @@ namespace Onboarding.Functions
 {
     public static class SaveToTableStorage
     {
-        [FunctionName("SaveToTableStorage")]
+        [FunctionName(nameof(SaveToTableStorage))]
         public static async Task Run(
             [QueueTrigger("tablequeue", Connection = "StorageConnectionString")] string myQueueItem,
             [Table("onboardingtable", Connection = "StorageConnectionString")] CloudTable onboardingTable,

@@ -15,7 +15,7 @@ namespace OnboardingWithEventGrid.Functions
 {
     public class SubmitToEventGrid
     {
-        [FunctionName("SubmitToEventGrid")]
+        [FunctionName(nameof(SubmitToEventGrid))]
         public static async Task<IActionResult> Run(
            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
            ILogger log)

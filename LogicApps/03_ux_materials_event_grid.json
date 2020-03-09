@@ -1,0 +1,95 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Condition": {
+                "actions": {
+                    "Send_email_(V4)_2": {
+                        "inputs": {
+                            "body": {
+                                "from": "no-reply@uxmaterials.com",
+                                "ishtml": true,
+                                "subject": "New ux materials",
+                                "text": "<p>Hello,<br>\nNew UX materials available under path: @{triggerBody()?['data'].url}<br>\n<br>\nBest Regards,<br>\nUX Team</p>",
+                                "to": "<email-receiver>"
+                            },
+                            "host": {
+                                "connection": {
+                                    "name": "@parameters('$connections')['sendgrid']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/v4/mail/send"
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    }
+                },
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@triggerBody()?['eventType']",
+                                "Microsoft.Storage.BlobCreated"
+                            ]
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "type": "If"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "When_a_resource_event_occurs": {
+                "inputs": {
+                    "body": {
+                        "properties": {
+                            "destination": {
+                                "endpointType": "webhook",
+                                "properties": {
+                                    "endpointUrl": "@{listCallbackUrl()}"
+                                }
+                            },
+                            "topic": "/subscriptions/<insert-subscription-id>/resourceGroups/serverless-workshops/providers/Microsoft.Storage/storageAccounts/storageaccountux"
+                        }
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azureeventgrid']['connectionId']"
+                        }
+                    },
+                    "path": "/subscriptions/@{encodeURIComponent('<insert-subscription-id>')}/providers/@{encodeURIComponent('Microsoft.Storage.StorageAccounts')}/resource/eventSubscriptions",
+                    "queries": {
+                        "x-ms-api-version": "2017-06-15-preview"
+                    }
+                },
+                "splitOn": "@triggerBody()",
+                "type": "ApiConnectionWebhook"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "azureeventgrid": {
+                    "connectionId": "/subscriptions/<insert-subscription-id>/resourceGroups/serverless-workshops/providers/Microsoft.Web/connections/azureeventgrid",
+                    "connectionName": "azureeventgrid",
+                    "id": "/subscriptions/<insert-subscription-id>/providers/Microsoft.Web/locations/westeurope/managedApis/azureeventgrid"
+                },
+                "sendgrid": {
+                    "connectionId": "/subscriptions/<insert-subscription-id>/resourceGroups/serverless-workshops/providers/Microsoft.Web/connections/sendgrid",
+                    "connectionName": "sendgrid",
+                    "id": "/subscriptions/<insert-subscription-id>/providers/Microsoft.Web/locations/westeurope/managedApis/sendgrid"
+                }
+            }
+        }
+    }
+}
