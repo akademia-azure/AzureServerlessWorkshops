@@ -42,8 +42,11 @@ namespace Todos
             if (!string.IsNullOrEmpty(id))
             {
                 var itemToRemove = Todos.Where(t => t.Id == id).FirstOrDefault();
-                Todos.Remove(itemToRemove);
 
+                if(itemToRemove == null)
+                    return new BadRequestObjectResult("Todo not found");
+
+                Todos.Remove(itemToRemove);
                 return new OkObjectResult($"Todo was deleted");
             }
 
@@ -59,8 +62,11 @@ namespace Todos
             if (!string.IsNullOrEmpty(id))
             {
                 var itemToToggle = Todos.Where(t => t.Id == id).FirstOrDefault();
-                itemToToggle.Checked = !itemToToggle.Checked;
 
+                if (itemToToggle == null)
+                    return new BadRequestObjectResult("Todo not found");
+
+                itemToToggle.Checked = !itemToToggle.Checked;
                 return new OkObjectResult($"Todo was toggled");
             }
 
@@ -75,9 +81,7 @@ namespace Todos
             dynamic data = JsonConvert.DeserializeObject(requestBody);
 
             if(data?.title == null)
-            {
                 return new BadRequestObjectResult("Please pass a name on the query string or in the request body");
-            }
 
             Todos.Add(new Todo
             {

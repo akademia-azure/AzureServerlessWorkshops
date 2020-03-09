@@ -10,7 +10,7 @@ namespace Onboarding.Functions
     {
         [FunctionName("SendEmail")]
         public static void Run(
-            [QueueTrigger("emailqueue", Connection = "StorageConnectionString")] string myQueueItem,
+            [QueueTrigger("emailqueue", Connection = "AzureWebJobsStorage")] string myQueueItem,
             [SendGrid(ApiKey = "SendGridApiKey")] out SendGridMessage message,
             ILogger log)
         {
@@ -29,3 +29,4 @@ namespace Onboarding.Functions
         }
     }
 }
+ 

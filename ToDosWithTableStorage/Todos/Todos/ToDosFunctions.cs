@@ -38,7 +38,7 @@ namespace Todos
                 var result = await todoTable.ExecuteAsync(query);
 
                 if (result.Result == null)
-                    return new NotFoundResult();
+                    return new BadRequestObjectResult("Todo not found");
 
                 var deleteOperation = TableOperation.Delete((TodoEntity)result.Result);
                 await todoTable.ExecuteAsync(deleteOperation);
@@ -62,7 +62,7 @@ namespace Todos
                 var result = await todoTable.ExecuteAsync(query);
 
                 if (result.Result == null)
-                    return new NotFoundResult();
+                    return new BadRequestObjectResult("Todo not found");
 
                 var existingRow = (TodoEntity)result.Result;
                 existingRow.Checked = !existingRow.Checked;

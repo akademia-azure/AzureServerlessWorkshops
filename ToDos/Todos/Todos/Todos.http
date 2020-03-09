@@ -1,0 +1,23 @@
+@id = insert_todo_id_here
+
+#####
+
+GET http://localhost:7071/api/all
+
+#####
+
+POST http://localhost:7071/api/add
+content-type: application/json
+
+{
+    "title": "Walk dog!",
+    "checked": false
+}
+
+#####
+
+DELETE  http://localhost:7071/api/delete?id={{id}}
+
+#####
+
+PUT http://localhost:7071/api/toggle?id={{id}}
